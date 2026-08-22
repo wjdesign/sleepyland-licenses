@@ -217,19 +217,19 @@
 </head>
 <body>
     <canvas id="sky" aria-hidden="true"></canvas>
-    <div class="moon" aria-hidden="true"><img src="assets/moon.png" alt=""></div>
+    <div class="moon" aria-hidden="true"><img src="assets/moon.webp" alt="" fetchpriority="high" width="180" height="142"></div>
 
     <main class="container">
         <a href="feedback.html" class="contact-fab" aria-label="意見回饋" title="意見回饋">
             <img src="assets/icon_connect.png" alt="">
         </a>
         <div class="cbody">
-        <img class="logo" src="assets/logo.png" alt="夢鄉">
+        <img class="logo" src="assets/logo.webp" alt="夢鄉">
         <h1>夢鄉</h1>
         <p class="subtitle">白噪音・哄睡音效・多軌混音<br>陪你與寶寶安穩入睡</p>
 
         <a href="https://apps.apple.com/app/id6802943558" class="download" target="_blank" rel="noopener">
-            <img class="dico" src="assets/icon_app_store_blue.png" alt=""> 在 App Store 下載
+            <img class="dico" src="assets/icon_app_store_blue.webp" alt=""> 在 App Store 下載
         </a>
 
         <div class="quicklinks">
@@ -520,13 +520,45 @@
                     `perspective(1100px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
             }
         }
-        // 用 requestAnimationFrame 節流：多個 pointermove 合併成每幀一次更新，避免卡頓
+        // 快取卡片位置，避免每次 pointermove 都 getBoundingClientRect（會觸發強制自動重排）
+        let rect = null;
+        function refreshRect(){ rect = card.getBoundingClientRect(); }
+        window.addEventListener('resize', refreshRect);
+        window.addEventListener('scroll', refreshRect, { passive: true });
+        card.addEventListener('pointerenter', refreshRect);
+        // requestAnimationFrame 節流：多個 pointermove 合併成每幀一次更新
         card.addEventListener('pointermove', (e) => {
-            const r = card.getBoundingClientRect();
-            pending = { mx: e.clientX - r.left, my: e.clientY - r.top, w: r.width, h: r.height };
+            if (!rect) refreshRect();
+            pending = { mx: e.clientX - rect.left, my: e.clientY - rect.top, w: rect.width, h: rect.height };
             if (!ticking){ ticking = true; requestAnimationFrame(apply); }
         });
         card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+    })();
+
+    // 手機：用陀螺儀/水平儀驅動 2.5D 傾斜（無 hover）。iOS 13+ 需輕觸一次授權感測器。
+    (function(){
+        const card = document.querySelector('.container'); if (!card) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const MAX = 5; let base = null, gp = null, gtick = false;
+        function gapply(){ gtick = false; if (!gp) return;
+            card.style.transform = `perspective(1100px) rotateX(${gp.x.toFixed(2)}deg) rotateY(${gp.y.toFixed(2)}deg)`; }
+        function onOrient(e){
+            if (e.gamma == null || e.beta == null) return;
+            if (!base) base = { g: e.gamma, b: e.beta };     // 以初次拿到的姿態為中立點
+            const cl = (v) => Math.max(-1, Math.min(1, v / 22));
+            const rotY = cl(e.gamma - base.g) * MAX;          // 左右傾
+            const rotX = -cl(e.beta - base.b) * MAX;          // 前後傾
+            gp = { x: rotX, y: rotY };
+            if (!gtick){ gtick = true; requestAnimationFrame(gapply); }
+        }
+        function startGyro(){ window.addEventListener('deviceorientation', onOrient); }
+        const DOE = window.DeviceOrientationEvent;
+        if (DOE && typeof DOE.requestPermission === 'function'){
+            const ask = function(){ DOE.requestPermission().then(function(s){ if (s === 'granted') startGyro(); }).catch(function(){}); };
+            window.addEventListener('touchend', ask, { once: true });
+        } else if (DOE){
+            startGyro();
+        }
     })();
     </script>
 </body>
