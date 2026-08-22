@@ -40,7 +40,7 @@
 
         .container{
             position:relative; z-index:1; max-width:600px; width:100%;
-            max-height:calc(100dvh - 80px); display:flex; flex-direction:column; overflow:hidden;
+            max-height:min(760px, calc(100dvh - 80px)); display:flex; flex-direction:column; overflow:hidden;
             background:linear-gradient(to bottom, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 40%), var(--card);
             backdrop-filter:blur(14px) saturate(1.4); -webkit-backdrop-filter:blur(14px) saturate(1.4);
             border:1px solid var(--line); border-radius:24px;
