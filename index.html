@@ -534,32 +534,6 @@
         });
         card.addEventListener('pointerleave', () => { card.style.transform = ''; });
     })();
-
-    // 手機：用陀螺儀/水平儀驅動 2.5D 傾斜（無 hover）。iOS 13+ 需輕觸一次授權感測器。
-    (function(){
-        const card = document.querySelector('.container'); if (!card) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const MAX = 5; let base = null, gp = null, gtick = false;
-        function gapply(){ gtick = false; if (!gp) return;
-            card.style.transform = `perspective(1100px) rotateX(${gp.x.toFixed(2)}deg) rotateY(${gp.y.toFixed(2)}deg)`; }
-        function onOrient(e){
-            if (e.gamma == null || e.beta == null) return;
-            if (!base) base = { g: e.gamma, b: e.beta };     // 以初次拿到的姿態為中立點
-            const cl = (v) => Math.max(-1, Math.min(1, v / 22));
-            const rotY = cl(e.gamma - base.g) * MAX;          // 左右傾
-            const rotX = -cl(e.beta - base.b) * MAX;          // 前後傾
-            gp = { x: rotX, y: rotY };
-            if (!gtick){ gtick = true; requestAnimationFrame(gapply); }
-        }
-        function startGyro(){ window.addEventListener('deviceorientation', onOrient); }
-        const DOE = window.DeviceOrientationEvent;
-        if (DOE && typeof DOE.requestPermission === 'function'){
-            const ask = function(){ DOE.requestPermission().then(function(s){ if (s === 'granted') startGyro(); }).catch(function(){}); };
-            window.addEventListener('touchend', ask, { once: true });
-        } else if (DOE){
-            startGyro();
-        }
-    })();
     </script>
 </body>
 </html>
