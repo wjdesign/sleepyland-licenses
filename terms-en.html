@@ -24,7 +24,7 @@
             min-height:100vh; color:var(--ink); -webkit-font-smoothing:antialiased; line-height:1.8;
             background:
                 linear-gradient(180deg, rgba(3,2,9,0.40) 0%, rgba(10,6,26,0.32) 46%, rgba(20,12,50,0.46) 100%),
-                #03020a url('assets/bg.jpg') center center / cover no-repeat fixed;
+                #03020a url('assets/bg.webp') center center / cover no-repeat fixed;
             display:flex; align-items:center; justify-content:center; padding:40px 20px; overflow-x:hidden;
         }
         /* 動畫層（星雲＋星星＋流星＋雲朵） */
@@ -426,11 +426,11 @@
 
         // 淡色文字（英/開源標題、版權）：雲飄到底下時切深色
         let dimTargets = [];
-        function refreshTargets(){ dimTargets = Array.from(document.querySelectorAll('.lang-title, .footer > span')); }
+        function refreshTargets(){ dimTargets = Array.from(document.querySelectorAll('.lang-title, .footer > span')).map(function(el){ return { el: el, rect: el.getBoundingClientRect() }; }); }
         function checkClouds(t){
             if (!dimTargets.length) return;
-            for (const el of dimTargets){
-                const r = el.getBoundingClientRect();
+            for (const dt of dimTargets){
+                const el = dt.el, r = dt.rect;
                 let lit = false;
                 for (const c of clouds){
                     const span = W + c.sprite.width;
