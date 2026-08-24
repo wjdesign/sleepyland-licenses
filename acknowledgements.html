@@ -32,7 +32,7 @@
         /* 月亮素材圖＋淡黃光暈 */
         .moon{ position:fixed; top:5vh; right:6vw; width:min(180px,26vw); z-index:0; pointer-events:none;
                filter:drop-shadow(0 0 34px var(--glow)); }
-        .moon img{ width:100%; display:block; }
+        .moon img{ width:100%; height:auto; display:block; }
         .moon::before{ content:''; position:absolute; inset:-95%; z-index:-1; border-radius:50%;
             background:radial-gradient(circle, rgba(255,247,205,0.36) 0%, rgba(255,243,185,0.18) 26%, rgba(255,240,175,0.07) 48%, rgba(255,240,175,0.02) 66%, transparent 82%);
             filter:blur(26px); animation:moonGlow 6s ease-in-out infinite; }
@@ -162,7 +162,7 @@
 </head>
 <body>
     <canvas id="sky" aria-hidden="true"></canvas>
-    <div class="moon" aria-hidden="true"><img src="assets/moon.webp" alt="" fetchpriority="high" width="180" height="142"></div>
+    <div class="moon" aria-hidden="true"><img src="assets/moon.webp" alt="" fetchpriority="high" width="180" height="180"></div>
     <main class="container">
         <a href="feedback.html" class="contact-fab" aria-label="意見回饋" title="意見回饋"><img src="assets/icon_connect.png" alt=""></a>
         <div class="chead">
