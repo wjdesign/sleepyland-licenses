@@ -90,6 +90,8 @@
                        inset 0 1px 0 rgba(255,255,255,0.12);
         }
         .container:hover::after{ opacity:1; }
+        .logo-link{ display:inline-block; line-height:0; transition:transform .2s ease, filter .2s ease; }
+        .logo-link:hover{ transform:translateY(-2px); filter:brightness(1.08); }
         .logo{
             width:84px; height:84px; margin:0 auto 20px; display:block;
             border-radius:22px; border:1px solid rgb(64,24,251);
@@ -224,7 +226,7 @@
             <img src="assets/icon_connect.png" alt="">
         </a>
         <div class="cbody">
-        <img class="logo" src="assets/logo.webp" alt="夢鄉">
+        <a class="logo-link" href="index.html" aria-label="回到首頁" title="回到首頁"><img class="logo" src="assets/logo.webp" alt="夢鄉"></a>
         <h1>夢鄉</h1>
         <p class="subtitle">白噪音・哄睡音效・多軌混音<br>陪你與寶寶安穩入睡</p>
 
