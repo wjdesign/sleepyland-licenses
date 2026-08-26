@@ -308,6 +308,25 @@
 
   /* --- 微型 router --- */
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  /* 依目標頁同步 <link rel=stylesheet>（index 沒 site.css、content 頁有；進出時增刪）。
+     回傳 Promise：等新加入的樣式載入完成再繼續，避免內容先出現、樣式後到的閃爍。 */
+  function syncStylesheets(doc){
+    var want = [].slice.call(doc.querySelectorAll('link[rel="stylesheet"]')).map(function(l){ return l.getAttribute('href'); });
+    var have = [].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
+    have.forEach(function(l){ if(want.indexOf(l.getAttribute('href')) < 0 && l.parentNode) l.parentNode.removeChild(l); });
+    var proms = [];
+    want.forEach(function(href){
+      if(!href) return;
+      if(!document.querySelector('link[rel="stylesheet"][href="'+href+'"]')){
+        var el = document.createElement('link'); el.rel='stylesheet'; el.href=href;
+        proms.push(new Promise(function(res){ el.onload = el.onerror = res; setTimeout(res, 1500); }));
+        document.head.appendChild(el);
+      }
+    });
+    return Promise.all(proms);
+  }
+
   var busy = false;
   async function navigate(url, push){
     if(busy){ location.href = url; return; }
@@ -321,7 +340,8 @@
       var cur = document.getElementById('swup');
       if(!next || !cur) throw new Error('no-container');
       cur.classList.add('swup-fade');
-      await wait(reduce ? 0 : 150);
+      // 淡出的同時把目標頁需要的 stylesheet 準備好(增刪+等載入)
+      await Promise.all([ wait(reduce ? 0 : 150), syncStylesheets(doc) ]);
       cur.innerHTML = next.innerHTML;
       // 連同該頁專屬 <style> 一起換（每頁 CSS 不同，否則跨頁注入的內容會缺樣式破版）
       var ncss = doc.getElementById('pagecss'), ccss = document.getElementById('pagecss');
@@ -378,8 +398,25 @@
     btn.addEventListener('click', function(){ audio.paused ? play() : pause(); });
     audio.addEventListener('play', function(){ setUI(true); });
     audio.addEventListener('pause', function(){ setUI(false); });
-    // 曾經開過 → 嘗試自動接續（可能被瀏覽器擋，擋了就維持暫停待使用者點）
-    if(sessionStorage.getItem('bgm')==='on'){ play(); }
+    // 自動播放策略：使用者沒有「主動按暫停」過(pref!=='off')就嘗試播放。
+    // 瀏覽器自動播放限制 → 先直接試(同分頁曾解鎖過會成功)，若被擋則掛一次性監聽，
+    // 使用者第一次點擊/觸控/按鍵(畫面任何地方)就開始。純捲動/移動滑鼠不算手勢、不會觸發。
+    var pref = sessionStorage.getItem('bgm');   // 'on' | 'off' | null
+    if(pref !== 'off'){
+      play();   // 先試（曾解鎖過就直接接續）
+      var kick = function(e){
+        // 點到 BGM 按鈕本身 → 交給按鈕自己的 toggle，別在這裡搶播
+        if(e && e.target && e.target.closest && e.target.closest('#bgm-btn')){ cleanup(); return; }
+        if(sessionStorage.getItem('bgm')!=='off' && audio.paused){ play(); }
+        cleanup();
+      };
+      var cleanup = function(){
+        document.removeEventListener('pointerdown', kick, true);
+        document.removeEventListener('keydown', kick, true);
+      };
+      document.addEventListener('pointerdown', kick, true);
+      document.addEventListener('keydown', kick, true);
+    }
     setUI(!audio.paused);
   }
 
