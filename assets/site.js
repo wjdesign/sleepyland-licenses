@@ -247,9 +247,14 @@
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* --- 換頁過場：模糊＋淡出/淡入（不用 transform，避免與 2.5D 傾斜衝突；模糊感配合助眠主題）--- */
+  /* --- 換頁過場 + 常駐背景層 --- */
+  // body 背景與 #sky 放進「永不移除」的樣式：換頁增刪 site.css 時 body 不會瞬間變白閃一下
   var st = document.createElement('style');
-  st.textContent = '#swup{transition:opacity .2s ease, filter .2s ease} #swup.swup-fade{opacity:0; filter:blur(7px)}';
+  st.textContent =
+    '#swup{transition:opacity .2s ease, filter .2s ease}' +
+    '#swup.swup-fade{opacity:0; filter:blur(7px)}' +
+    '#sky{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none}' +
+    "body{background:linear-gradient(180deg, rgba(3,2,9,0.40) 0%, rgba(10,6,26,0.32) 46%, rgba(20,12,50,0.46) 100%), #03020a url('assets/bg.webp') center center / cover no-repeat; background-attachment:fixed}";
   document.head.appendChild(st);
 
   /* --- 卡片：邊框柔光跟游標；首頁(data-home)再加 2.5D 傾斜 --- */
