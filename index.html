@@ -138,18 +138,7 @@
         }
         .link .lico{ width:20px; height:20px; vertical-align:-5px; margin-right:8px; }
         /* liquid glass hover：半透明玻璃亮起＋亮邊高光＋毛玻璃折射（文字維持亮色，不變實心底） */
-        .link:hover{
-            /* pure-css glossy：半透明底＋上半部反光漸層（取代會蓋字的 ::before），內反光收斂 */
-            background:linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 55%), rgba(255,255,255,0.10);
-            border-color:rgba(255,255,255,0.28);
-            transform:translateY(-2px);
-            box-shadow:0 20px 40px rgba(0,0,0,0.15),
-                       inset 0 1px 1px rgba(255,255,255,0.32),
-                       inset 0 8px 18px rgba(255,255,255,0.12),
-                       inset 0 -15px 30px rgba(0,0,0,0.06);
-            backdrop-filter:blur(12px) saturate(180%);
-            -webkit-backdrop-filter:blur(12px) saturate(180%);
-        }
+        .link:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
         .link:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
         /* 四顆快速連結：一行四個、上圖下字（手機一行兩個） */
@@ -163,15 +152,7 @@
             transition:transform .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease, backdrop-filter .22s ease;
         }
         .qlink img{ width:32px; height:32px; display:block; }
-        .qlink:hover{
-            background:linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 55%), rgba(255,255,255,0.10);
-            border-color:rgba(255,255,255,0.28); transform:translateY(-2px);
-            box-shadow:0 20px 40px rgba(0,0,0,0.15),
-                       inset 0 1px 1px rgba(255,255,255,0.32),
-                       inset 0 8px 18px rgba(255,255,255,0.12),
-                       inset 0 -15px 30px rgba(0,0,0,0.06);
-            backdrop-filter:blur(12px) saturate(180%); -webkit-backdrop-filter:blur(12px) saturate(180%);
-        }
+        .qlink:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
         .qlink:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
         .divider{ height:1px; background:var(--line); margin:26px 0 0; }
         .footer{ margin-top:26px; display:flex; flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:center; gap:14px;
@@ -184,14 +165,7 @@
             backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
             transition:transform .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease, backdrop-filter .22s ease; }
         .contact-fab img{ width:26px; height:26px; display:block; }
-        .contact-fab:hover{
-            background:linear-gradient(to bottom, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 55%), rgba(255,255,255,0.10);
-            border-color:rgba(255,255,255,0.28); transform:translateY(-2px);
-            box-shadow:0 20px 40px rgba(0,0,0,0.15),
-                       inset 0 1px 1px rgba(255,255,255,0.32),
-                       inset 0 7px 14px rgba(255,255,255,0.12),
-                       inset 0 -12px 22px rgba(0,0,0,0.06);
-            backdrop-filter:blur(12px) saturate(180%); -webkit-backdrop-filter:blur(12px) saturate(180%); }
+        .contact-fab:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
         .contact-fab:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
         .contact-btn .lico{ width:18px; height:18px; vertical-align:middle; }
 

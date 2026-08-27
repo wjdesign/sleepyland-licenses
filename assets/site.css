@@ -59,9 +59,7 @@ body{
             text-decoration:none; font-size:13.5px; font-weight:600; margin-bottom:6px;
             backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
             transition:transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease; }
-.back:hover{ transform:translateY(-2px);
-            background:linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-            border-color:rgba(255,255,255,0.26); box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+.back:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
 .bico{ width:15px; height:15px; vertical-align:-2px; }
 .hico{ width:20px; height:20px; vertical-align:-4px; margin-right:6px; }
 .back-fab{ display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%;
@@ -77,10 +75,8 @@ body{
             transition:opacity .25s ease, transform .25s ease, background .2s ease, border-color .2s ease; }
 .scrolltop img{ width:20px; height:20px; display:block; }
 .scrolltop.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
-.scrolltop:hover{ background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); }
-.back-fab:hover{ transform:translateY(-2px);
-            background:linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-            border-color:rgba(255,255,255,0.26); box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+.scrolltop:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
+.back-fab:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
 .logo-link{ display:block; width:max-content; margin:0 auto; line-height:0; transition:transform .2s ease, filter .2s ease; }
 .logo-link:hover{ transform:translateY(-2px); filter:brightness(1.08); }
 .logo{ width:76px; height:76px; display:block; margin:0 auto 16px; border-radius:18px;
@@ -120,7 +116,7 @@ a:hover{ text-decoration:underline; }
 .copy-btn{ width:44px; min-width:44px; height:44px; aspect-ratio:1; border-radius:50%;
             background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.18); cursor:pointer;
             display:flex; align-items:center; justify-content:center; transition:all .2s ease; flex-shrink:0; }
-.copy-btn:hover{ transform:scale(1.1); background:rgba(255,255,255,0.2); }
+.copy-btn:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
 .toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(120px);
             background:rgba(14,10,34,0.92); color:#EAF4FF; padding:12px 24px; border-radius:10px;
             border:1px solid rgba(255,255,255,0.14); backdrop-filter:blur(8px); opacity:0; transition:all .3s ease; z-index:5; }
