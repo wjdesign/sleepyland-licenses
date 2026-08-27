@@ -260,7 +260,14 @@
     function refreshRect(){ rect = card.getBoundingClientRect(); }
     window.addEventListener('resize', refreshRect);
     window.addEventListener('scroll', refreshRect, {passive:true});
-    card.addEventListener('pointerenter', refreshRect);
+    // 進場：先開 transition 讓「平面→2.5D」平滑淡入，短暫時間後移除 → 之後追蹤游標即時不延遲
+    card.addEventListener('pointerenter', function(){
+      refreshRect();
+      if(!tiltOn || reduce) return;
+      clearTimeout(card.__tiltT);
+      card.style.transition = 'transform .28s ease';
+      card.__tiltT = setTimeout(function(){ card.style.transition = 'transform 0s'; }, 280);
+    });
     card.addEventListener('pointermove', function(e){
       if(!rect) refreshRect();
       var mx = e.clientX - rect.left, my = e.clientY - rect.top;
@@ -272,7 +279,13 @@
         card.style.transform = 'perspective(1100px) rotateX('+rotX.toFixed(2)+'deg) rotateY('+rotY.toFixed(2)+'deg)';
       }
     });
-    card.addEventListener('pointerleave', function(){ if(tiltOn) card.style.transform=''; });
+    // 離場：開 transition 平滑回到平面
+    card.addEventListener('pointerleave', function(){
+      if(!tiltOn) return;
+      clearTimeout(card.__tiltT);
+      card.style.transition = 'transform .32s ease';
+      card.style.transform = '';
+    });
   }
 
   /* --- scrolltop（.cbody 每次換頁都是新元素，需重綁）--- */
@@ -391,11 +404,12 @@
     var img = btn.querySelector('img');
     if(img) img.setAttribute('src', playing ? 'assets/icon_playing.png' : 'assets/icon_pause.png');
   }
-  function playBgm(){
+  function playBgm(onSuccess){
     if(!bgmAudio) return;
     var p = bgmAudio.play();
-    if(p && p.then){ p.then(function(){ setBgmUI(true); sessionStorage.setItem('bgm','on'); })
+    if(p && p.then){ p.then(function(){ setBgmUI(true); sessionStorage.setItem('bgm','on'); if(onSuccess) onSuccess(); })
                       .catch(function(){ setBgmUI(false); }); }
+    else { setBgmUI(true); sessionStorage.setItem('bgm','on'); if(onSuccess) onSuccess(); }
   }
   function pauseBgm(){ if(bgmAudio){ bgmAudio.pause(); setBgmUI(false); sessionStorage.setItem('bgm','off'); } }
   // 綁定卡片內的按鈕（換頁後按鈕是新元素，需重綁；用 __bound 防重複）
@@ -416,17 +430,17 @@
     var pref = sessionStorage.getItem('bgm');   // 'on' | 'off' | null
     if(pref !== 'off'){
       playBgm();
+      var EVTS = ['pointerdown','touchend','click','keydown'];   // iOS 對某些事件較嚴，多掛幾種提高解鎖成功率
+      var cleanup = function(){ EVTS.forEach(function(t){ document.removeEventListener(t, kick, true); }); };
       var kick = function(e){
-        if(e && e.target && e.target.closest && e.target.closest('#bgm-btn')){ cleanup(); return; }
-        if(sessionStorage.getItem('bgm')!=='off' && bgmAudio.paused){ playBgm(); }
-        cleanup();
+        // 點到 BGM 按鈕本身 → 交給按鈕自己的 toggle，別搶播(也別 cleanup，讓後續手勢仍可解鎖)
+        if(e && e.target && e.target.closest && e.target.closest('#bgm-btn')) return;
+        if(sessionStorage.getItem('bgm')==='off'){ cleanup(); return; }
+        if(!bgmAudio.paused){ cleanup(); return; }
+        // 只有「真的播成功」才移除監聽；這次手勢被擋就保留、等下一次手勢再試(iOS 常見)
+        playBgm(cleanup);
       };
-      var cleanup = function(){
-        document.removeEventListener('pointerdown', kick, true);
-        document.removeEventListener('keydown', kick, true);
-      };
-      document.addEventListener('pointerdown', kick, true);
-      document.addEventListener('keydown', kick, true);
+      EVTS.forEach(function(t){ document.addEventListener(t, kick, true); });
     }
   }
 
