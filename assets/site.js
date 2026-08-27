@@ -265,8 +265,8 @@
       refreshRect();
       if(!tiltOn || reduce) return;
       clearTimeout(card.__tiltT);
-      card.style.transition = 'transform .28s ease';
-      card.__tiltT = setTimeout(function(){ card.style.transition = 'transform 0s'; }, 280);
+      card.style.transition = 'transform .16s ease';
+      card.__tiltT = setTimeout(function(){ card.style.transition = 'transform 0s'; }, 160);
     });
     card.addEventListener('pointermove', function(e){
       if(!rect) refreshRect();
@@ -283,7 +283,7 @@
     card.addEventListener('pointerleave', function(){
       if(!tiltOn) return;
       clearTimeout(card.__tiltT);
-      card.style.transition = 'transform .32s ease';
+      card.style.transition = 'transform .2s ease';
       card.style.transform = '';
     });
   }
