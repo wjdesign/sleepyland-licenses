@@ -248,7 +248,7 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* --- 換頁過場 + 常駐背景層 --- */
-  // body 背景與 #sky 放進「永不移除」的樣式：換頁增刪 site.css 時 body 不會瞬間變白閃一下
+  // 背景層(body底/#sky/.moon/光暈)放進「永不移除」的常駐樣式：換頁替換 #pagecss 時背景完全不受影響、不閃
   var st = document.createElement('style');
   st.textContent =
     'html{scrollbar-gutter:stable}' +   /* 保留捲軸空間，換頁瞬間捲軸出現/消失也不改變寬度、背景不抖 */
@@ -333,24 +333,6 @@
   /* --- 微型 router --- */
   function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 
-  /* 依目標頁同步 <link rel=stylesheet>（index 沒 site.css、content 頁有；進出時增刪）。
-     回傳 Promise：等新加入的樣式載入完成再繼續，避免內容先出現、樣式後到的閃爍。 */
-  function syncStylesheets(doc){
-    var want = [].slice.call(doc.querySelectorAll('link[rel="stylesheet"]')).map(function(l){ return l.getAttribute('href'); });
-    var have = [].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
-    have.forEach(function(l){ if(want.indexOf(l.getAttribute('href')) < 0 && l.parentNode) l.parentNode.removeChild(l); });
-    var proms = [];
-    want.forEach(function(href){
-      if(!href) return;
-      if(!document.querySelector('link[rel="stylesheet"][href="'+href+'"]')){
-        var el = document.createElement('link'); el.rel='stylesheet'; el.href=href;
-        proms.push(new Promise(function(res){ el.onload = el.onerror = res; setTimeout(res, 1500); }));
-        document.head.appendChild(el);
-      }
-    });
-    return Promise.all(proms);
-  }
-
   var busy = false;
   async function navigate(url, push){
     if(busy){ location.href = url; return; }
@@ -364,12 +346,11 @@
       var cur = document.getElementById('swup');
       if(!next || !cur) throw new Error('no-container');
       cur.classList.add('swup-fade');
-      // 淡出的同時把目標頁需要的 stylesheet 準備好(增刪+等載入)
-      await Promise.all([ wait(reduce ? 0 : 190), syncStylesheets(doc) ]);
-      cur.innerHTML = next.innerHTML;
-      // 連同該頁專屬 <style> 一起換（每頁 CSS 不同，否則跨頁注入的內容會缺樣式破版）
+      await wait(reduce ? 0 : 190);   // 淡出
+      // 換頁內容 + 該頁完整 inline CSS（每頁自帶完整樣式，同步替換、零外部載入空檔）
       var ncss = doc.getElementById('pagecss'), ccss = document.getElementById('pagecss');
       if(ncss && ccss && ccss.textContent !== ncss.textContent) ccss.textContent = ncss.textContent;
+      cur.innerHTML = next.innerHTML;
       if(next.hasAttribute('data-home')) cur.setAttribute('data-home',''); else cur.removeAttribute('data-home');
       if(doc.title) document.title = doc.title;
       if(push) history.pushState({url:url}, '', url);
