@@ -251,6 +251,7 @@
   // body 背景與 #sky 放進「永不移除」的樣式：換頁增刪 site.css 時 body 不會瞬間變白閃一下
   var st = document.createElement('style');
   st.textContent =
+    'html{scrollbar-gutter:stable}' +   /* 保留捲軸空間，換頁瞬間捲軸出現/消失也不改變寬度、背景不抖 */
     '#swup{transition:opacity .2s ease, filter .2s ease}' +
     '#swup.swup-fade{opacity:0; filter:blur(7px)}' +
     '#sky{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none}' +
