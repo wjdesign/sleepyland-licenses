@@ -130,19 +130,10 @@ a:hover{ text-decoration:underline; }
 .footer a:hover{ text-decoration:underline; }
 @media (max-width:560px){ .chead{ padding:18px 20px 12px; } .cbody{ padding:18px 20px 30px; } body{ padding:16px; } .container{ max-height:calc(100dvh - 32px); border-radius:20px; } }
 @media (prefers-reduced-motion:reduce){ .back,.email-link,.copy-btn{ transition:none; } .moon::before{ animation:none; } }
-/* 常駐背景音樂按鈕 */
-        .bgm-btn{ position:fixed; left:20px; bottom:20px; z-index:20; width:46px; height:46px; border-radius:50%;
+        .bgm-btn{ position:absolute; top:72px; right:16px; z-index:5; width:48px; height:48px; border-radius:50%;
             display:flex; align-items:center; justify-content:center; cursor:pointer;
-            background:var(--pill,rgba(255,255,255,0.06)); border:1px solid rgba(255,255,255,0.16);
-            backdrop-filter:blur(8px) saturate(1.3); -webkit-backdrop-filter:blur(8px) saturate(1.3);
-            box-shadow:0 8px 22px rgba(4,2,16,0.45); transition:transform .2s ease, background .2s ease, border-color .2s ease; }
-.bgm-btn:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.30); }
-.bgm-ico{ display:flex; align-items:flex-end; gap:2.5px; height:18px; }
-.bgm-ico span{ width:3px; height:6px; border-radius:2px; background:#9AD0F2; opacity:.85; }
-.bgm-btn.playing .bgm-ico span{ animation:bgmBar 1s ease-in-out infinite; }
-.bgm-ico span:nth-child(1){ animation-delay:0s; }
-.bgm-ico span:nth-child(2){ animation-delay:.18s; }
-.bgm-ico span:nth-child(3){ animation-delay:.36s; }
-.bgm-ico span:nth-child(4){ animation-delay:.12s; }
-@keyframes bgmBar{ 0%,100%{ height:5px; } 50%{ height:16px; } }
-@media (prefers-reduced-motion:reduce){ .bgm-btn.playing .bgm-ico span{ animation:none; height:11px; } }
+            background:var(--pill,rgba(255,255,255,0.06)); border:1px solid rgba(255,255,255,0.10);
+            backdrop-filter:blur(6px) saturate(1.3); -webkit-backdrop-filter:blur(6px) saturate(1.3);
+            box-shadow:0 8px 22px rgba(4,2,16,0.35); transition:transform .2s ease, background .2s ease, border-color .2s ease; }
+        .bgm-btn:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); }
+        .bgm-ico-img{ width:24px; height:24px; display:block; }

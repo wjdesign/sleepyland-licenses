@@ -290,6 +290,7 @@
     tiltOn = !!(card && card.hasAttribute('data-home'));
     if(!tiltOn && card) card.style.transform = '';
     bindScrollTop();
+    bindBgmButton();
     if(window.__skyRefresh){ try{ window.__skyRefresh(); }catch(e){} }
   }
   window.__initCard = initCard;
@@ -379,35 +380,45 @@
   });
   window.addEventListener('popstate', function(){ navigate(location.href, false); });
 
-  /* --- 常駐 BGM 播放器 --- */
-  function initBGM(){
-    var audio = document.getElementById('bgm-audio');
+  /* --- 常駐 BGM：audio 常駐(卡片外不換頁)；按鈕在卡片內、每次換頁需重綁 --- */
+  var bgmAudio = null;
+  function setBgmUI(playing){
     var btn = document.getElementById('bgm-btn');
-    if(!audio || !btn) return;
-    function setUI(playing){
-      btn.classList.toggle('playing', playing);
-      btn.setAttribute('aria-label', playing ? '暫停背景音樂' : '播放背景音樂');
-      btn.setAttribute('title', playing ? '暫停背景音樂' : '播放背景音樂');
-    }
-    function play(){
-      var p = audio.play();
-      if(p && p.then){ p.then(function(){ setUI(true); sessionStorage.setItem('bgm','on'); })
-                        .catch(function(){ setUI(false); }); }
-    }
-    function pause(){ audio.pause(); setUI(false); sessionStorage.setItem('bgm','off'); }
-    btn.addEventListener('click', function(){ audio.paused ? play() : pause(); });
-    audio.addEventListener('play', function(){ setUI(true); });
-    audio.addEventListener('pause', function(){ setUI(false); });
-    // 自動播放策略：使用者沒有「主動按暫停」過(pref!=='off')就嘗試播放。
-    // 瀏覽器自動播放限制 → 先直接試(同分頁曾解鎖過會成功)，若被擋則掛一次性監聽，
-    // 使用者第一次點擊/觸控/按鍵(畫面任何地方)就開始。純捲動/移動滑鼠不算手勢、不會觸發。
+    if(!btn) return;
+    btn.classList.toggle('playing', playing);
+    btn.setAttribute('aria-label', playing ? '關閉背景音樂' : '播放背景音樂');
+    btn.setAttribute('title', playing ? '關閉背景音樂' : '播放背景音樂');
+    var img = btn.querySelector('img');
+    if(img) img.setAttribute('src', playing ? 'assets/icon_playing.png' : 'assets/icon_pause.png');
+  }
+  function playBgm(){
+    if(!bgmAudio) return;
+    var p = bgmAudio.play();
+    if(p && p.then){ p.then(function(){ setBgmUI(true); sessionStorage.setItem('bgm','on'); })
+                      .catch(function(){ setBgmUI(false); }); }
+  }
+  function pauseBgm(){ if(bgmAudio){ bgmAudio.pause(); setBgmUI(false); sessionStorage.setItem('bgm','off'); } }
+  // 綁定卡片內的按鈕（換頁後按鈕是新元素，需重綁；用 __bound 防重複）
+  function bindBgmButton(){
+    var btn = document.getElementById('bgm-btn');
+    if(!btn || btn.__bound) return; btn.__bound = true;
+    btn.addEventListener('click', function(){ if(bgmAudio){ bgmAudio.paused ? playBgm() : pauseBgm(); } });
+    setBgmUI(bgmAudio ? !bgmAudio.paused : false);
+  }
+  function initBGM(){
+    bgmAudio = document.getElementById('bgm-audio');
+    if(!bgmAudio) return;
+    bgmAudio.addEventListener('play', function(){ setBgmUI(true); });
+    bgmAudio.addEventListener('pause', function(){ setBgmUI(false); });
+    // 自動播放策略：使用者沒有「主動關閉」過(pref!=='off')就嘗試播放。瀏覽器自動播放限制 →
+    // 先直接試(同分頁曾解鎖過會成功)，被擋則掛一次性監聽，使用者第一次點擊/觸控/按鍵(畫面任何地方)
+    // 就開始。純捲動/移動滑鼠不算手勢、不會觸發。
     var pref = sessionStorage.getItem('bgm');   // 'on' | 'off' | null
     if(pref !== 'off'){
-      play();   // 先試（曾解鎖過就直接接續）
+      playBgm();
       var kick = function(e){
-        // 點到 BGM 按鈕本身 → 交給按鈕自己的 toggle，別在這裡搶播
         if(e && e.target && e.target.closest && e.target.closest('#bgm-btn')){ cleanup(); return; }
-        if(sessionStorage.getItem('bgm')!=='off' && audio.paused){ play(); }
+        if(sessionStorage.getItem('bgm')!=='off' && bgmAudio.paused){ playBgm(); }
         cleanup();
       };
       var cleanup = function(){
@@ -417,10 +428,9 @@
       document.addEventListener('pointerdown', kick, true);
       document.addEventListener('keydown', kick, true);
     }
-    setUI(!audio.paused);
   }
 
-  function boot(){ bindCard(); initCard(); initBGM(); }
+  function boot(){ bindCard(); initBGM(); initCard(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();

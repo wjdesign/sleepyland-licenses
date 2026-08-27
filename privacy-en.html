@@ -27,6 +27,7 @@
     <canvas id="sky" aria-hidden="true"></canvas>
     <div class="moon" aria-hidden="true"><img src="assets/moon.webp" alt="" fetchpriority="high" width="180" height="180"></div>
     <main class="container" id="swup">
+        <button id="bgm-btn" class="bgm-btn" type="button" aria-label="播放背景音樂" title="播放背景音樂"><img class="bgm-ico-img" src="assets/icon_pause.png" alt=""></button>
         <div class="chead">
 <a href="index.html" class="back-fab" aria-label="Back to Home" title="Back to Home"><img src="assets/icon_back.png" alt=""></a>
             <a href="privacy.html" class="back langbtn"><img class="bico" src="assets/icon_translate.png" alt="">繁體中文</a>
@@ -110,11 +111,6 @@
 
     <!-- 常駐背景音樂（換頁不中斷）-->
     <audio id="bgm-audio" src="assets/bgm.mp3" loop preload="none"></audio>
-    <button id="bgm-btn" class="bgm-btn" type="button" aria-label="播放背景音樂" title="播放背景音樂">
-        <span class="bgm-ico" aria-hidden="true">
-            <span></span><span></span><span></span><span></span>
-        </span>
-    </button>
     <script src="assets/site.js" defer></script>
 </body>
 </html>
