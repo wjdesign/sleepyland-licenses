@@ -63,6 +63,13 @@
         .result-msg.show{ max-height:140px; padding:14px 16px; opacity:1; }
         .result-msg.ok{ background:rgba(123,224,160,0.14); border:1px solid rgba(123,224,160,0.4); color:#c9f4da; }
         .result-msg.err{ background:rgba(255,120,120,0.14); border:1px solid rgba(255,120,120,0.4); color:#ffc9c9; }
+        .contact-fab{ position:absolute; top:16px; right:16px; z-index:5; width:44px; height:44px; border-radius:50%;
+            display:inline-flex; align-items:center; justify-content:center;
+            background:var(--pill); border:1px solid rgba(255,255,255,0.08);
+            backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+            transition:transform .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease; }
+        .contact-fab img{ width:24px; height:24px; display:block; }
+        .contact-fab:hover{ transform:translateY(-2px); background:linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border-color:rgba(255,255,255,0.28); box-shadow:0 8px 22px rgba(4,2,16,0.35); }
     </style>
 </head>
 <body>
@@ -72,6 +79,7 @@
         <button id="bgm-btn" class="bgm-btn" type="button" aria-label="播放背景音樂" title="播放背景音樂"><img class="bgm-ico-img" src="assets/icon_pause.png" alt=""></button>
         <div class="chead">
 <a href="index.html" class="back-fab" aria-label="返回主頁" title="返回主頁"><img src="assets/icon_back.png" alt=""></a>
+            <a href="support.html" class="contact-fab" aria-label="支援中心" title="支援中心"><img src="assets/icon_support_center.png" alt=""></a>
             <div class="header">
             <a class="logo-link" href="index.html" aria-label="回到首頁" title="回到首頁"><img class="logo" src="assets/logo.webp" alt="夢鄉"></a>
             <h1>意見回饋</h1>

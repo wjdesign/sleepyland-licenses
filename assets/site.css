@@ -65,6 +65,7 @@ body{
 .back-fab{ display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%;
             background:var(--pill); border:1px solid rgba(255,255,255,0.10);
             backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+            margin-left:-24px;   /* 左距與右上按鈕(right:16)對齊：chead padding-left 40 → 實際離卡片左緣 16 */
             transition:transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease; }
 .back-fab img{ width:20px; height:20px; display:block; }
 .scrolltop{ position:absolute; bottom:18px; right:18px; z-index:4; width:44px; height:44px; border-radius:50%;
@@ -124,7 +125,7 @@ a:hover{ text-decoration:underline; }
 .footer{ text-align:center; margin-top:30px; color:var(--faint); font-size:13px; }
 .footer a{ color:var(--accent); text-decoration:none; }
 .footer a:hover{ text-decoration:underline; }
-@media (max-width:560px){ .chead{ padding:18px 20px 12px; } .cbody{ padding:18px 20px 30px; } body{ padding:16px; } .container{ max-height:calc(100dvh - 32px); border-radius:20px; } }
+@media (max-width:560px){ .chead{ padding:18px 20px 12px; } .cbody{ padding:18px 20px 30px; } body{ padding:16px; } .container{ max-height:calc(100dvh - 32px); border-radius:20px; } .back-fab{ margin-left:-4px; } }
 @media (prefers-reduced-motion:reduce){ .back,.email-link,.copy-btn{ transition:none; } .moon::before{ animation:none; } }
         .bgm-btn{ position:absolute; top:72px; right:16px; z-index:5; width:48px; height:48px; border-radius:50%;
             display:flex; align-items:center; justify-content:center; cursor:pointer;
