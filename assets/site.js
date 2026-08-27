@@ -256,6 +256,8 @@
     '#sky{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none}' +
     '.moon{position:fixed; top:5vh; right:6vw; width:min(180px,26vw); z-index:0; pointer-events:none}' +
     '.moon img{width:100%; height:auto; display:block}' +
+    ".moon::before{content:''; position:absolute; inset:-95%; z-index:-1; border-radius:50%; background:radial-gradient(circle, rgba(255,247,205,0.36) 0%, rgba(255,243,185,0.18) 26%, rgba(255,240,175,0.07) 48%, rgba(255,240,175,0.02) 66%, transparent 82%); filter:blur(26px); animation:moonGlow 6s ease-in-out infinite}" +
+    '@keyframes moonGlow{0%,100%{opacity:.82; transform:scale(1)} 50%{opacity:1; transform:scale(1.07)}}' +
     "body{background:linear-gradient(180deg, rgba(3,2,9,0.40) 0%, rgba(10,6,26,0.32) 46%, rgba(20,12,50,0.46) 100%), #03020a url('assets/bg.webp') center center / cover no-repeat; background-attachment:fixed}";
   document.head.appendChild(st);
 
