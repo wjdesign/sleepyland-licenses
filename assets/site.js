@@ -247,9 +247,9 @@
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* --- 換頁淡入淡出樣式 --- */
+  /* --- 換頁過場：模糊＋淡出/淡入（不用 transform，避免與 2.5D 傾斜衝突；模糊感配合助眠主題）--- */
   var st = document.createElement('style');
-  st.textContent = '#swup{transition:opacity .16s ease} #swup.swup-fade{opacity:0}';
+  st.textContent = '#swup{transition:opacity .2s ease, filter .2s ease} #swup.swup-fade{opacity:0; filter:blur(7px)}';
   document.head.appendChild(st);
 
   /* --- 卡片：邊框柔光跟游標；首頁(data-home)再加 2.5D 傾斜 --- */
@@ -355,7 +355,7 @@
       if(!next || !cur) throw new Error('no-container');
       cur.classList.add('swup-fade');
       // 淡出的同時把目標頁需要的 stylesheet 準備好(增刪+等載入)
-      await Promise.all([ wait(reduce ? 0 : 150), syncStylesheets(doc) ]);
+      await Promise.all([ wait(reduce ? 0 : 190), syncStylesheets(doc) ]);
       cur.innerHTML = next.innerHTML;
       // 連同該頁專屬 <style> 一起換（每頁 CSS 不同，否則跨頁注入的內容會缺樣式破版）
       var ncss = doc.getElementById('pagecss'), ccss = document.getElementById('pagecss');
