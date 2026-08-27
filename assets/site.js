@@ -254,6 +254,8 @@
     '#swup{transition:opacity .2s ease, filter .2s ease}' +
     '#swup.swup-fade{opacity:0; filter:blur(7px)}' +
     '#sky{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none}' +
+    '.moon{position:fixed; top:5vh; right:6vw; width:min(180px,26vw); z-index:0; pointer-events:none}' +
+    '.moon img{width:100%; height:auto; display:block}' +
     "body{background:linear-gradient(180deg, rgba(3,2,9,0.40) 0%, rgba(10,6,26,0.32) 46%, rgba(20,12,50,0.46) 100%), #03020a url('assets/bg.webp') center center / cover no-repeat; background-attachment:fixed}";
   document.head.appendChild(st);
 
