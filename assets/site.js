@@ -251,7 +251,7 @@
   // 背景層(body底/#sky/.moon/光暈)放進「永不移除」的常駐樣式：換頁替換 #pagecss 時背景完全不受影響、不閃
   var st = document.createElement('style');
   st.textContent =
-    'html{scrollbar-gutter:stable}' +   /* 保留捲軸空間，換頁瞬間捲軸出現/消失也不改變寬度、背景不抖 */
+    'html{height:100%; overflow:hidden}' +   /* 外層完全不捲(html+body皆鎖)，捲動只在玻璃卡片.cbody內部；外層零捲軸=無雙層、換頁也不會有捲軸出現/消失的寬度抖動 */
     '#swup{transition:opacity .2s ease, filter .2s ease}' +
     '#swup.swup-fade{opacity:0; filter:blur(7px)}' +
     '#sky{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none}' +
